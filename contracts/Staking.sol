@@ -16,7 +16,6 @@ contract MyToken is ERC20, Ownable{
     function burn(uint256 amount) public onlyOwner {
         _burn(msg.sender, amount);
     }
- 
 }
 
 contract Staking is Ownable { // them function deposit / rescueStuck ( rut tien Owner)
@@ -30,6 +29,7 @@ contract Staking is Ownable { // them function deposit / rescueStuck ( rut tien 
     mapping(address => uint256) public stakeTime;
     //tra ve tien lai
     mapping(address => uint256) public rewardAmount;
+    mapping(address => uint256) public rewardAmount1;
 
     mapping(address => uint256) public lastTimeUpdateReward;
 
@@ -41,7 +41,7 @@ contract Staking is Ownable { // them function deposit / rescueStuck ( rut tien 
         stakingToken = MyToken(tokenAddress);
     }
 
-    function stake(uint256 amount) external onlyOwner{
+    function stake(uint256 amount) external {
         require(amount > 0, "Cannot stake 0");
 
         updateReward(msg.sender);
@@ -51,7 +51,7 @@ contract Staking is Ownable { // them function deposit / rescueStuck ( rut tien 
         emit Stake(msg.sender, amount, block.timestamp);
     }
 
-    function unstake() external onlyOwner{
+    function unstake() external {
         address account = msg.sender;
         require(stakeAmount[account] > 0, "No staked amount");
         withdraw();
@@ -60,17 +60,16 @@ contract Staking is Ownable { // them function deposit / rescueStuck ( rut tien 
         stakingToken.transfer(account, amount); // transfer su dung khi rut tien
     }
 
-    //rut tien
     function withdraw() public {
         updateReward(msg.sender);
         
         uint256 reward = rewardAmount[msg.sender];
         require(reward > 0, "No reward to claim");
         stakingToken.transfer(msg.sender, reward);
+        rewardAmount1[msg.sender] = rewardAmount[msg.sender];
         rewardAmount[msg.sender] = 0;
     }
 
-    //
     function updateReward(address account) internal {
         if (account != address(0)) {
             uint256 reward = calculateReward(account);
@@ -85,7 +84,7 @@ contract Staking is Ownable { // them function deposit / rescueStuck ( rut tien 
             return 0;
         }else{
             uint256 duration = block.timestamp - lastTimeUpdateReward[account];
-            return duration * 1 * stakeAmount[account] / 100 /1000;
+            return duration * 1 * stakeAmount[account] / 1000000;
         }   
     }
 

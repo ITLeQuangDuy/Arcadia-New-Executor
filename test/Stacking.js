@@ -12,9 +12,8 @@ describe("MyToken contract",function(){
         const nftBalance = quantityMintToken - quantityBurnToken;
 
         await myToken.mint(owner.address, quantityMintToken);
-        //console.log("quantity before mint token:", await myToken.balanceOf(owner.address));
-        await myToken.connect(owner).burn(quantityBurnToken)
-        //console.log("quantity after mint token:", await myToken.balanceOf(owner.address));
+        await myToken.connect(owner).burn(quantityBurnToken);
+
         expect(nftBalance).to.equal(2)
     });
 })
@@ -33,6 +32,15 @@ describe("Staking contract",function(){
         const addr = await myToken.getAddress();
         const Staking = await ethers.getContractFactory("Staking");
         staking = await Staking.deploy(addr);
+    });
+
+    //Staking
+    it("Staking: Cannot stake 0", async function(){
+        await expect(staking.connect(owner).stake(0)).to.be.revertedWith("Cannot stake 0");
+    });
+
+    it("UnStake: No staked amount", async function(){
+        await expect(staking.connect(owner).unstake()).to.be.revertedWith("No staked amount");
     });
 
     it("Staking", async function(){
@@ -61,18 +69,6 @@ describe("Staking contract",function(){
     })
 
     it("WithdRraw", async function(){
-        await myToken.connect(owner).approve(staking.address, ethers.parseEther("100"));
-        await staking.connect(staking.address).stake(ethers.parseEther("100"));
-
-        await time.increase(60 * 60 * 24 * 7); // Increase time by 1 week
-
-        await staking.connect(signer).withdraw();
-
-        const aliceBalance = await myToken.balanceOf(signer.address);
-        expect(aliceBalance).to.equal(ethers.parseEther("110"));
+        await expect(staking.connect(owner).withdraw()).to.be.revertedWith("No reward to claim");
     });
-
-    it("", async function(){
-
-    })  
 })

@@ -2,8 +2,8 @@
   "_format": "hh-sol-cache-2",
   "files": {
     "C:\\Users\\LeQuangDuy\\Desktop\\HARDHAT\\Staking\\contracts\\Staking.sol": {
-      "lastModificationDate": 1691143017244,
-      "contentHash": "eecce5b9bf5f62e7cd5f4f53b91fbad3",
+      "lastModificationDate": 1691481660271,
+      "contentHash": "5ce27f707f914aba8997c7b03501201e",
       "sourceName": "contracts/Staking.sol",
       "solcConfig": {
         "version": "0.8.19",
@@ -31,13 +31,13 @@
       "imports": [
         "@openzeppelin/contracts/token/ERC20/ERC20.sol",
         "@openzeppelin/contracts/utils/math/SafeMath.sol",
-        "@openzeppelin/contracts/access/Ownable.sol"
+        "@openzeppelin/contracts/access/Ownable.sol",
+        "./MyToken.sol"
       ],
       "versionPragmas": [
         "^0.8.0"
       ],
       "artifacts": [
-        "MyToken",
         "Staking"
       ]
     },
@@ -260,8 +260,8 @@
       ]
     },
     "C:\\Users\\LeQuangDuy\\Desktop\\HARDHAT\\Staking\\contracts\\MyToken.sol": {
-      "lastModificationDate": 1691125394315,
-      "contentHash": "7fa09be9e9772680ae99b64d5f504110",
+      "lastModificationDate": 1691481555087,
+      "contentHash": "6b9cc37c78f460c411cdc36da333d4d9",
       "sourceName": "contracts/MyToken.sol",
       "solcConfig": {
         "version": "0.8.19",
@@ -286,12 +286,15 @@
           }
         }
       },
-      "imports": [],
+      "imports": [
+        "@openzeppelin/contracts/token/ERC20/ERC20.sol",
+        "@openzeppelin/contracts/access/Ownable.sol"
+      ],
       "versionPragmas": [
         "^0.8.0"
       ],
       "artifacts": [
-        "MyToken1"
+        "MyToken"
       ]
     }
   }

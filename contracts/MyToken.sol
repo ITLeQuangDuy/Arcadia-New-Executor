@@ -1,23 +1,18 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-contract MyToken1 {
-    mapping(address => uint256) public balances;
-    mapping(address => uint256) public lockTime;
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 
-    function lockTokens(uint256 amount, uint256 duration) public {
-        require(amount <= balances[msg.sender], "Insufficient balance");
-        require(duration > 0, "Duration must be greater than 0");
+contract MyToken is ERC20, Ownable{
+    
+    constructor(string memory name, string memory symbol) ERC20(name, symbol) {}
 
-        balances[msg.sender] -= amount;
-        balances[address(this)] += amount;
-        lockTime[msg.sender] = block.timestamp + duration;
+    function mint(address account, uint256 amount) public onlyOwner {
+        _mint(account, amount);
     }
 
-    function unlockTokens() public {
-        require(block.timestamp >= lockTime[msg.sender], "Tokens are still locked");
-        uint256 amount = balances[address(this)];
-        balances[address(this)] = 0;
-        balances[msg.sender] += amount;
+    function burn(uint256 amount) public onlyOwner {
+        _burn(msg.sender, amount);
     }
 }
